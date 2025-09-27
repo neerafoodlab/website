@@ -1,0 +1,99 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "recipes"
+    label: "Recipes"
+    folder: "content/recipes"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Description", name: "description", widget: "text"}
+      - {label: "Cover Image", name: "coverImage", widget: "image"}
+      - {label: "Category", name: "category", widget: "select", options: ["Indian", "Snacks", "Desserts", "Festive Recipes", "Healthy", "Lunchbox Ideas"]}
+      - {label: "Tags", name: "tags", widget: "list", default: []}
+      - {label: "Prep Time", name: "prepTime", widget: "string", default: "15 mins"}
+      - {label: "Cook Time", name: "cookTime", widget: "string", default: "30 mins"}
+      - {label: "Total Time", name: "totalTime", widget: "string", default: "45 mins"}
+      - {label: "Servings", name: "servings", widget: "number", default: 4}
+      - {label: "Difficulty", name: "difficulty", widget: "select", options: ["Easy", "Medium", "Hard"], default: "Easy"}
+      - {label: "Rating", name: "rating", widget: "number", default: 4.5, min: 1, max: 5, step: 0.1}
+      - {label: "Featured", name: "featured", widget: "boolean", default: false}
+      - {label: "Published Date", name: "publishedAt", widget: "datetime", default: "{{now}}"}
+      - {label: "Updated Date", name: "updatedAt", widget: "datetime", default: "{{now}}"}
+      - label: "Author"
+        name: "author"
+        widget: "object"
+        fields:
+          - {label: "Name", name: "name", widget: "string", default: "Neera"}
+          - {label: "Bio", name: "bio", widget: "text", default: "Passionate home cook and recipe creator"}
+          - {label: "Avatar", name: "avatar", widget: "image", default: "/images/author-avatar.jpg"}
+      - label: "Ingredients"
+        name: "ingredients"
+        widget: "list"
+        fields:
+          - {label: "Name", name: "name", widget: "string"}
+          - {label: "Amount", name: "amount", widget: "string"}
+          - {label: "Unit", name: "unit", widget: "string", required: false}
+      - label: "Instructions"
+        name: "instructions"
+        widget: "list"
+        fields:
+          - {label: "Step", name: "step", widget: "number"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text"}
+          - {label: "Image", name: "image", widget: "image", required: false}
+      - label: "Nutrition"
+        name: "nutrition"
+        widget: "object"
+        fields:
+          - {label: "Calories", name: "calories", widget: "number", default: 0}
+          - {label: "Protein (g)", name: "protein", widget: "number", default: 0}
+          - {label: "Carbs (g)", name: "carbs", widget: "number", default: 0}
+          - {label: "Fat (g)", name: "fat", widget: "number", default: 0}
+          - {label: "Fiber (g)", name: "fiber", widget: "number", default: 0}
+      - label: "SEO"
+        name: "seo"
+        widget: "object"
+        fields:
+          - {label: "Meta Title", name: "metaTitle", widget: "string"}
+          - {label: "Meta Description", name: "metaDescription", widget: "text"}
+          - {label: "Keywords", name: "keywords", widget: "list", default: []}
+      - {label: "Content", name: "content", widget: "markdown"}
+
+  - name: "pages"
+    label: "Pages"
+    files:
+      - label: "Homepage"
+        name: "homepage"
+        file: "content/pages/homepage.md"
+        fields:
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text"}
+          - {label: "Hero Title", name: "heroTitle", widget: "string"}
+          - {label: "Hero Subtitle", name: "heroSubtitle", widget: "text"}
+          - {label: "Hero Image", name: "heroImage", widget: "image"}
+          - {label: "Content", name: "content", widget: "markdown"}
+
+  - name: "settings"
+    label: "Settings"
+    files:
+      - label: "Site Settings"
+        name: "site"
+        file: "content/settings/site.json"
+        fields:
+          - {label: "Site Name", name: "name", widget: "string"}
+          - {label: "Site Description", name: "description", widget: "text"}
+          - {label: "Logo", name: "logo", widget: "image"}
+          - {label: "Favicon", name: "favicon", widget: "image"}
+          - {label: "Social Media", name: "social", widget: "object", fields: [
+              {label: "Facebook", name: "facebook", widget: "string", required: false},
+              {label: "Instagram", name: "instagram", widget: "string", required: false},
+              {label: "Twitter", name: "twitter", widget: "string", required: false},
+              {label: "YouTube", name: "youtube", widget: "string", required: false}
+            ]}

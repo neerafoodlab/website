@@ -1,0 +1,29 @@
+# Placeholder Images
+
+To see the full design, you'll need to add these images:
+
+## Recipe Images (place in public/images/recipes/):
+- butter-chicken.jpg
+- vegetable-biryani.jpg
+- gulab-jamun.jpg
+- samosa.jpg
+- quinoa-bowl.jpg
+
+## Other Images (place in public/images/):
+- hero-dish.jpg (for homepage hero section)
+- about-chef.jpg (for about page)
+- author-avatar.jpg (for recipe author)
+
+## Image Specifications:
+- Recipe images: 800x400px (2:1 ratio)
+- Hero image: 1200x600px
+- About image: 500x600px
+- Author avatar: 100x100px (square)
+
+## Quick Setup:
+1. Find food images online (unsplash.com, pexels.com)
+2. Resize them to the specifications above
+3. Save them in the appropriate folders
+4. Refresh the browser to see the images
+
+The website will work without images, but they make it look much more professional!
