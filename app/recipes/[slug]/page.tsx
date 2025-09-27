@@ -107,14 +107,18 @@ export default async function RecipePage({ params }: RecipePageProps) {
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Ingredients</h2>
               <div className="bg-gray-50 rounded-xl p-6">
                 <ul className="space-y-3">
-                  {recipe.ingredients.map((ingredient, index) => (
-                    <li key={index} className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-primary-600 rounded-full flex-shrink-0"></div>
-                      <span className="text-gray-700">
-                        <span className="font-medium">{ingredient.amount} {ingredient.unit}</span> {ingredient.name}
-                      </span>
-                    </li>
-                  ))}
+                  {recipe.ingredients && recipe.ingredients.length > 0 ? (
+                    recipe.ingredients.map((ingredient, index) => (
+                      <li key={index} className="flex items-center space-x-3">
+                        <div className="w-2 h-2 bg-primary-600 rounded-full flex-shrink-0"></div>
+                        <span className="text-gray-700">
+                          <span className="font-medium">{ingredient.amount} {ingredient.unit}</span> {ingredient.name}
+                        </span>
+                      </li>
+                    ))
+                  ) : (
+                    <li className="text-gray-500 italic">No ingredients listed</li>
+                  )}
                 </ul>
               </div>
             </div>
@@ -123,17 +127,21 @@ export default async function RecipePage({ params }: RecipePageProps) {
             <div className="mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Instructions</h2>
               <div className="space-y-6">
-                {recipe.instructions.map((instruction, index) => (
-                  <div key={index} className="flex space-x-4">
-                    <div className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
-                      {instruction.step}
+                {recipe.instructions && recipe.instructions.length > 0 ? (
+                  recipe.instructions.map((instruction, index) => (
+                    <div key={index} className="flex space-x-4">
+                      <div className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                        {instruction.step}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900 mb-2">{instruction.title}</h3>
+                        <p className="text-gray-700 leading-relaxed">{instruction.description}</p>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900 mb-2">{instruction.title}</h3>
-                      <p className="text-gray-700 leading-relaxed">{instruction.description}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p className="text-gray-500 italic">No instructions listed</p>
+                )}
               </div>
             </div>
 

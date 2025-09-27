@@ -5,7 +5,7 @@ import { Recipe, RecipeCard } from '@/types/recipe'
 
 const recipesDirectory = path.join(process.cwd(), 'content/recipes')
 
-export function getAllRecipes(): Recipe[] {
+export function getAllRecipes(includeUnpublished: boolean = false): Recipe[] {
   const fileNames = fs.readdirSync(recipesDirectory)
   const allRecipesData = fileNames
     .filter((name) => name.endsWith('.md'))
@@ -17,9 +17,11 @@ export function getAllRecipes(): Recipe[] {
       return {
         slug: name.replace(/\.md$/, ''),
         ...data,
+        status: data.status || 'published', // Default to published for existing recipes
         content,
       } as unknown as Recipe
     })
+    .filter(recipe => includeUnpublished || recipe.status === 'published')
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
 
   return allRecipesData

@@ -13,6 +13,7 @@ export interface Recipe {
   rating: number
   featured: boolean
   youtubeVideoId?: string
+  status: 'draft' | 'published'
   publishedAt: string
   updatedAt: string
   author: {
@@ -43,6 +44,18 @@ export interface Recipe {
     metaDescription: string
     keywords: string[]
   }
+  // New fields for comprehensive recipe content
+  introduction?: string
+  history?: string
+  whyThisWorks?: string[]
+  proTips?: string[]
+  servingSuggestions?: string[]
+  storageInstructions?: string[]
+  faqs?: {
+    question: string
+    answer: string
+  }[]
+  conclusion?: string
 }
 
 export interface RecipeCard {

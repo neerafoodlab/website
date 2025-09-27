@@ -11,6 +11,7 @@ servings: 2
 difficulty: "Easy"
 rating: 4.5
 featured: true
+status: "published"
 publishedAt: "2024-01-08T10:00:00Z"
 updatedAt: "2024-01-08T10:00:00Z"
 author:

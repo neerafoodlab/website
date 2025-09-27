@@ -1,17 +1,7 @@
-import { Suspense } from 'react'
-import RecipeList from '@/components/RecipeList'
-import SearchAndFilter from '@/components/SearchAndFilter'
+import RecipeListClient from '@/components/RecipeListClient'
 import { getAllRecipes, getCategories } from '@/lib/recipes'
 
-interface RecipesPageProps {
-  searchParams: {
-    search?: string
-    category?: string
-    page?: string
-  }
-}
-
-export default async function RecipesPage({ searchParams }: RecipesPageProps) {
+export default async function RecipesPage() {
   const allRecipes = getAllRecipes()
   const categories = getCategories()
   
@@ -28,20 +18,8 @@ export default async function RecipesPage({ searchParams }: RecipesPageProps) {
           </p>
         </div>
 
-        {/* Search and Filter */}
-        <div className="mb-8">
-          <Suspense fallback={<div>Loading...</div>}>
-            <SearchAndFilter categories={categories} />
-          </Suspense>
-        </div>
-
-        {/* Recipe List */}
-        <Suspense fallback={<div>Loading recipes...</div>}>
-          <RecipeList 
-            recipes={allRecipes} 
-            searchParams={searchParams}
-          />
-        </Suspense>
+        {/* Client-side Recipe List with Search */}
+        <RecipeListClient recipes={allRecipes} categories={categories} />
       </div>
     </div>
   )

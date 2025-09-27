@@ -283,7 +283,7 @@ export default async function SettingsPage() {
           <li>2. Open <code>content/settings/site.json</code></li>
           <li>3. Edit the JSON values directly</li>
           <li>4. Save the file - changes will be reflected on the site</li>
-          <li>5. Use the "Copy Path" button above to quickly find the file</li>
+          <li>5. Use the &quot;Copy Path&quot; button above to quickly find the file</li>
         </ol>
       </div>
     </div>

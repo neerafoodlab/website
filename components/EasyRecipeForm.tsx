@@ -14,6 +14,7 @@ export default function EasyRecipeForm() {
     difficulty: 'Medium',
     rating: '4.5',
     featured: false,
+    status: 'draft',
     heroImage: '',
     youtubeVideoId: '',
     ingredients: '',
@@ -75,6 +76,7 @@ servings: ${recipeForm.servings}
 difficulty: "${recipeForm.difficulty}"
 rating: ${recipeForm.rating}
 featured: ${recipeForm.featured}
+status: "${recipeForm.status}"
 ${recipeForm.youtubeVideoId ? `youtubeVideoId: "${recipeForm.youtubeVideoId}"` : ''}
 publishedAt: "${currentDate}"
 updatedAt: "${currentDate}"
@@ -161,6 +163,7 @@ ${recipeForm.description}
         difficulty: 'Medium',
         rating: '4.5',
         featured: false,
+        status: 'draft',
         heroImage: '',
         youtubeVideoId: '',
         ingredients: '',
@@ -189,6 +192,7 @@ ${recipeForm.description}
       difficulty: 'Medium',
       rating: '4.5',
       featured: false,
+      status: 'draft',
       heroImage: '',
       youtubeVideoId: '',
       ingredients: '',
@@ -437,16 +441,39 @@ ${recipeForm.description}
           </div>
         </div>
 
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={{ display: 'flex', alignItems: 'center', fontWeight: '500', color: '#374151' }}>
-            <input
-              type="checkbox"
-              checked={recipeForm.featured}
-              onChange={(e) => handleInputChange('featured', e.target.checked)}
-              style={{ marginRight: '0.5rem' }}
-            />
-            Featured Recipe (appears on homepage)
-          </label>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+          <div>
+            <label style={{ display: 'flex', alignItems: 'center', fontWeight: '500', color: '#374151' }}>
+              <input
+                type="checkbox"
+                checked={recipeForm.featured}
+                onChange={(e) => handleInputChange('featured', e.target.checked)}
+                style={{ marginRight: '0.5rem' }}
+              />
+              Featured Recipe (appears on homepage)
+            </label>
+          </div>
+
+          <div>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', color: '#374151' }}>Publication Status</label>
+            <select
+              value={recipeForm.status}
+              onChange={(e) => handleInputChange('status', e.target.value)}
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                border: '1px solid #d1d5db',
+                borderRadius: '0.375rem',
+                fontSize: '1rem'
+              }}
+            >
+              <option value="draft">💾 Save as Draft</option>
+              <option value="published">🌟 Publish Recipe</option>
+            </select>
+            <p style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>
+              Drafts are not visible on the website. Published recipes appear on your site.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -454,7 +481,7 @@ ${recipeForm.description}
       <div style={{ marginBottom: '2rem' }}>
         <h3 style={{ fontSize: '1.2rem', fontWeight: '600', marginBottom: '1rem', color: '#111827' }}>🥘 Ingredients</h3>
         <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.5rem' }}>
-          Enter one ingredient per line. Format: "2 cups - basmati rice" or just "salt"
+          Enter one ingredient per line. Format: &quot;2 cups - basmati rice&quot; or just &quot;salt&quot;
         </p>
         <textarea
           value={recipeForm.ingredients}

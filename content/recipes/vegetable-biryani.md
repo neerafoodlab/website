@@ -11,6 +11,7 @@ servings: 6
 difficulty: "Medium"
 rating: 4.6
 featured: true
+status: "published"
 publishedAt: "2024-01-10T10:00:00Z"
 updatedAt: "2024-01-10T10:00:00Z"
 author:

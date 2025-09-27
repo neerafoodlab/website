@@ -158,7 +158,7 @@ export default async function PagesPage() {
           <li>2. Navigate to the <code>content/pages/</code> directory</li>
           <li>3. Edit the markdown files (.md) directly</li>
           <li>4. Save the file - changes will be reflected on the site</li>
-          <li>5. Use the "Copy Path" button above to quickly find the file</li>
+          <li>5. Use the &quot;Copy Path&quot; button above to quickly find the file</li>
         </ol>
       </div>
     </div>

@@ -8,6 +8,12 @@ const nextConfig = {
       unoptimized: true
     }
   }),
+  // Development images configuration
+  ...(process.env.NODE_ENV === 'development' && {
+    images: {
+      domains: ['img.youtube.com', 'i.ytimg.com']
+    }
+  }),
   experimental: {
     optimizePackageImports: ['framer-motion']
   },
