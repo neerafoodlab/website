@@ -1,295 +1,181 @@
-# Neera Food Lab - Food Blog Website
+# Neera Food Lab Website
 
-A modern, responsive food blog website built with Next.js, TypeScript, and Tailwind CSS, featuring a headless CMS for easy content management.
+A beautiful, modern recipe website built with Next.js, featuring a comprehensive recipe management system and stunning UI design.
 
-## 🚀 Features
+## 🌟 Features
 
-- **Modern Tech Stack**: Next.js 14, TypeScript, Tailwind CSS
-- **Headless CMS**: NetlifyCMS for easy content management
-- **SEO Optimized**: Static site generation, sitemap, structured data
-- **Mobile Responsive**: Beautiful design on all devices
-- **Performance**: Optimized images, lazy loading, fast loading times
-- **Search & Filter**: Advanced recipe search and filtering
-- **Newsletter**: Email subscription with Netlify Forms
-- **Security**: HTTPS, security headers, input sanitization
+- **Modern Design**: Clean, responsive design with beautiful animations
+- **Recipe Management**: Complete recipe system with ingredients, instructions, and nutrition info
+- **Static Generation**: Fast, SEO-friendly static site generation
+- **Category System**: Organized recipe categories and filtering
+- **Search Functionality**: Find recipes by name, ingredients, or tags
+- **Admin Dashboard**: Easy content management system
+- **Mobile Responsive**: Perfect on all devices
+- **GitHub Pages Ready**: Automatic deployment with GitHub Actions
+
+## 🚀 Live Website
+
+Visit the live website: [https://neerafoodlab.github.io/website/](https://neerafoodlab.github.io/website/)
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 14 with App Router
+- **Styling**: Tailwind CSS
+- **Content**: Markdown-based recipe system
+- **Deployment**: GitHub Pages
+- **Build**: Static Export
+- **Icons**: Lucide React
 
 ## 📁 Project Structure
 
 ```
-neera-food-lab/
-├── admin/                    # NetlifyCMS admin interface
-│   ├── config.yml           # CMS configuration
-│   └── index.html           # Admin login page
-├── app/                     # Next.js app directory
-│   ├── globals.css          # Global styles
-│   ├── layout.tsx           # Root layout
-│   ├── page.tsx             # Homepage
-│   ├── sitemap.ts           # Dynamic sitemap
-│   ├── robots.ts            # Robots.txt
-│   ├── recipes/             # Recipe pages
-│   │   ├── page.tsx         # Recipe listing
-│   │   └── [slug]/          # Individual recipe pages
-│   ├── about/               # About page
-│   └── contact/             # Contact page
-├── components/              # React components
-│   ├── Header.tsx           # Navigation header
-│   ├── Footer.tsx           # Site footer
-│   ├── Hero.tsx             # Homepage hero section
-│   ├── FeaturedRecipes.tsx  # Featured recipes section
-│   ├── Categories.tsx       # Recipe categories
-│   ├── Newsletter.tsx       # Email subscription
-│   ├── RecipeList.tsx       # Recipe listing component
-│   └── SearchAndFilter.tsx  # Search and filter UI
-├── content/                 # Content files
-│   └── recipes/             # Recipe markdown files
-├── lib/                     # Utility functions
-│   └── recipes.ts           # Recipe data handling
-├── types/                   # TypeScript type definitions
-│   └── recipe.ts            # Recipe types
-├── public/                  # Static assets
-│   ├── images/              # Images and media
-│   └── site.webmanifest     # PWA manifest
-├── netlify.toml             # Netlify configuration
-├── next.config.js           # Next.js configuration
-├── tailwind.config.js       # Tailwind CSS configuration
-└── package.json             # Dependencies and scripts
+├── app/                    # Next.js app directory
+│   ├── recipes/           # Recipe pages
+│   ├── admin/             # Admin dashboard
+│   └── globals.css        # Global styles
+├── components/            # React components
+├── content/               # Markdown content
+│   └── recipes/           # Recipe markdown files
+├── lib/                   # Utility functions
+├── public/                # Static assets
+└── .github/workflows/     # GitHub Actions
 ```
 
-## 🛠️ Installation & Setup
+## 🚀 Getting Started
 
 ### Prerequisites
 
 - Node.js 18+ 
 - npm or yarn
-- Git
 
-### Local Development
+### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd neera-food-lab
-   ```
+1. Clone the repository:
+```bash
+git clone https://github.com/neerafoodlab/website.git
+cd website
+```
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+2. Install dependencies:
+```bash
+npm install
+```
 
-3. **Run the development server**
-   ```bash
-   npm run dev
-   ```
+3. Run the development server:
+```bash
+npm run dev
+```
 
-4. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Production Build
+### Building for Production
 
 ```bash
 npm run build
-npm start
 ```
 
-## 📝 Content Management
+The built files will be in the `out` directory, ready for static hosting.
 
-### Adding New Recipes
+## 📝 Adding Recipes
 
-1. **Via NetlifyCMS** (Recommended)
-   - Visit `/admin` on your deployed site
-   - Login with your Netlify account
-   - Click "New Recipe" and fill in the form
-   - Publish to automatically deploy
+Recipes are stored as Markdown files in the `content/recipes/` directory. Each recipe file should follow this structure:
 
-2. **Via Markdown Files**
-   - Create a new `.md` file in `content/recipes/`
-   - Use the frontmatter template from existing recipes
-   - Follow the recipe structure and naming conventions
-
-### Recipe Frontmatter Template
-
-```yaml
+```markdown
 ---
-title: "Recipe Title"
-description: "Brief description of the recipe"
-coverImage: "/images/recipes/recipe-name.jpg"
-category: "Indian" # or Snacks, Desserts, etc.
-tags: ["tag1", "tag2", "tag3"]
-prepTime: "15 mins"
-cookTime: "30 mins"
-totalTime: "45 mins"
+title: "Recipe Name"
+description: "Recipe description"
+coverImage: "/images/recipes/recipe-image.jpg"
+category: "Category Name"
+prepTime: "30 minutes"
 servings: 4
-difficulty: "Easy" # Easy, Medium, Hard
+difficulty: "Easy"
 rating: 4.5
-featured: false
-publishedAt: "2024-01-15T10:00:00Z"
-updatedAt: "2024-01-15T10:00:00Z"
-author:
-  name: "Neera"
-  bio: "Passionate home cook and recipe creator"
-  avatar: "/images/author-avatar.jpg"
+featured: true
+publishedAt: "2024-01-01"
+youtubeVideoId: "VIDEO_ID"
+tags: ["tag1", "tag2"]
 ingredients:
-  - name: "ingredient name"
-    amount: "1"
-    unit: "cup"
+  - amount: "2 cups"
+    unit: "cups"
+    name: "ingredient name"
 instructions:
-  - step: 1
-    title: "Step title"
-    description: "Step description"
+  - title: "Step 1"
+    description: "Instruction description"
+    step: 1
 nutrition:
-  calories: 300
+  calories: 250
   protein: 15
-  carbs: 40
-  fat: 10
+  carbs: 30
+  fat: 8
   fiber: 5
-seo:
-  metaTitle: "SEO optimized title"
-  metaDescription: "SEO description"
-  keywords: ["keyword1", "keyword2"]
 ---
+
+Recipe content goes here...
 ```
-
-## 🚀 Deployment
-
-### Netlify Deployment
-
-1. **Connect to GitHub**
-   - Push your code to a GitHub repository
-   - Connect the repository to Netlify
-
-2. **Configure Build Settings**
-   - Build command: `npm run build`
-   - Publish directory: `out`
-   - Node version: 18
-
-3. **Domain Configuration**
-   - Add your custom domain: `www.neerafoodlab.com`
-   - Configure DNS settings as per Netlify instructions
-   - Enable HTTPS (automatic with Netlify)
-
-4. **Environment Variables**
-   - No additional environment variables needed for basic setup
-
-### Custom Domain Setup
-
-1. **In Netlify Dashboard**
-   - Go to Site settings > Domain management
-   - Add custom domain: `www.neerafoodlab.com`
-   - Configure DNS records as instructed
-
-2. **DNS Configuration**
-   - Point your domain to Netlify's servers
-   - Add CNAME record: `www` → `your-site.netlify.app`
 
 ## 🎨 Customization
 
-### Styling
-
-- **Colors**: Edit `tailwind.config.js` to change the color scheme
-- **Fonts**: Update font imports in `app/globals.css`
-- **Components**: Modify component files in `/components`
+### Branding
+- Update colors in `tailwind.config.js`
+- Replace logo in `public/brand/`
+- Update site metadata in `app/layout.tsx`
 
 ### Content
+- Edit homepage content in `content/pages/homepage.md`
+- Update site settings in `content/settings/site.json`
 
-- **Categories**: Update category options in `admin/config.yml`
-- **Navigation**: Modify navigation items in `components/Header.tsx`
-- **Footer**: Update footer links in `components/Footer.tsx`
+## 🚀 Deployment
 
-### SEO
+This website is configured for automatic deployment to GitHub Pages:
 
-- **Meta Tags**: Update default meta tags in `app/layout.tsx`
-- **Structured Data**: Add recipe schema in recipe pages
-- **Sitemap**: Automatically generated, no changes needed
+1. Push changes to the `main` branch
+2. GitHub Actions will automatically build and deploy
+3. The site will be available at `https://neerafoodlab.github.io/website/`
 
-## 📊 Performance Optimization
+### Manual Deployment
 
-### Images
+Run the deployment script:
+```bash
+./deploy.sh
+```
 
-- Use Next.js Image component for automatic optimization
-- Compress images before uploading
-- Use appropriate formats (WebP for modern browsers)
+## 📱 Features Overview
 
-### Build Optimization
+### Homepage
+- Hero section with featured recipes
+- Recipe categories
+- Newsletter signup
+- About section
 
-- Static site generation for all pages
-- Incremental static regeneration for content updates
-- Optimized bundle size with tree shaking
+### Recipe Pages
+- Detailed recipe information
+- Step-by-step instructions
+- Ingredient lists
+- Nutrition information
+- Related recipes
+- Social sharing
 
-## 🔒 Security
-
-### Implemented Security Measures
-
-- HTTPS enforcement
-- Security headers (XSS protection, content type options)
-- Input sanitization in forms
-- CSRF protection via Netlify Forms
-
-### CMS Security
-
-- Netlify Identity for authentication
-- Git-based content management
-- Role-based access control
-
-## 📈 Analytics & Monitoring
-
-### Recommended Tools
-
-1. **Google Analytics 4**
-   - Add tracking code to `app/layout.tsx`
-   - Monitor user behavior and content performance
-
-2. **Google Search Console**
-   - Verify domain ownership
-   - Monitor search performance and indexing
-
-3. **Netlify Analytics**
-   - Built-in analytics for basic metrics
-   - Monitor site performance and uptime
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-1. **Build Failures**
-   - Check Node.js version (18+)
-   - Verify all dependencies are installed
-   - Check for TypeScript errors
-
-2. **CMS Not Loading**
-   - Verify Netlify Identity is enabled
-   - Check admin configuration
-   - Ensure proper Git permissions
-
-3. **Images Not Loading**
-   - Check image paths and formats
-   - Verify images are in the correct directory
-   - Use Next.js Image component
-
-### Getting Help
-
-- Check the [Next.js documentation](https://nextjs.org/docs)
-- Review [Tailwind CSS docs](https://tailwindcss.com/docs)
-- Consult [Netlify CMS guide](https://www.netlifycms.org/docs)
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+### Admin Dashboard
+- Recipe management
+- Content editing
+- Site settings
+- Analytics
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+4. Submit a pull request
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
 
 ## 📞 Support
 
-For support and questions:
-- Email: hello@neerafoodlab.com
-- Website: [www.neerafoodlab.com](https://www.neerafoodlab.com)
+For support or questions, please open an issue on GitHub or contact us at [your-email@example.com](mailto:your-email@example.com).
 
 ---
 
-**Happy Cooking! 🍽️**
-# website
+Built with ❤️ for food lovers everywhere!
