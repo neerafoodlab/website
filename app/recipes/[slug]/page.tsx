@@ -1,11 +1,9 @@
-'use client'
-
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 import { Recipe } from '@/types/recipe'
-import { Clock, Users, Star, ChefHat, ExternalLink, Play, Bold, Italic, Underline, Link as LinkIcon, Image as ImageIcon, List, Quote } from 'lucide-react'
+import { Clock, Users, Star, ChefHat, ExternalLink, Play } from 'lucide-react'
+import { getAllRecipes, getRecipeBySlug, getRelatedRecipes } from '@/lib/recipes'
 
 interface RecipePageProps {
   params: {
@@ -13,184 +11,21 @@ interface RecipePageProps {
   }
 }
 
-// Rich Text Editor Component
-const RichTextEditor = ({ content, onChange, placeholder = "Start typing..." }: {
-  content: string
-  onChange: (content: string) => void
-  placeholder?: string
-}) => {
-  const [isToolbarVisible, setIsToolbarVisible] = useState(false)
-
-  const executeCommand = (command: string, value: string = '') => {
-    document.execCommand(command, false, value)
-    // Trigger onChange to update parent state
-    const selection = window.getSelection()
-    if (selection?.rangeCount) {
-      const range = selection.getRangeAt(0)
-      const container = range.commonAncestorContainer
-      if (container.nodeType === Node.TEXT_NODE) {
-        onChange((container as Text).textContent || '')
-      } else if (container.nodeType === Node.ELEMENT_NODE) {
-        onChange((container as Element).innerHTML || '')
-      }
-    }
-  }
-
-  return (
-    <div className="relative">
-      {/* Toolbar */}
-      <div
-        className={`rich-editor-toolbar absolute -top-12 left-0 right-0 p-2 flex items-center space-x-1 transition-all duration-200 ${
-          isToolbarVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
-        }`}
-        onMouseEnter={() => setIsToolbarVisible(true)}
-        onMouseLeave={() => setIsToolbarVisible(false)}
-      >
-        <button
-          type="button"
-          onClick={() => executeCommand('bold')}
-          className="p-1 hover:bg-gray-100 rounded text-gray-600 hover:text-gray-800"
-          title="Bold"
-        >
-          <Bold className="w-4 h-4" />
-        </button>
-        <button
-          type="button"
-          onClick={() => executeCommand('italic')}
-          className="p-1 hover:bg-gray-100 rounded text-gray-600 hover:text-gray-800"
-          title="Italic"
-        >
-          <Italic className="w-4 h-4" />
-        </button>
-        <button
-          type="button"
-          onClick={() => executeCommand('underline')}
-          className="p-1 hover:bg-gray-100 rounded text-gray-600 hover:text-gray-800"
-          title="Underline"
-        >
-          <Underline className="w-4 h-4" />
-        </button>
-        <div className="w-px h-4 bg-gray-300 mx-1" />
-        <button
-          type="button"
-          onClick={() => executeCommand('insertUnorderedList')}
-          className="p-1 hover:bg-gray-100 rounded text-gray-600 hover:text-gray-800"
-          title="Bullet List"
-        >
-          <List className="w-4 h-4" />
-        </button>
-        <button
-          type="button"
-          onClick={() => executeCommand('formatBlock', 'blockquote')}
-          className="p-1 hover:bg-gray-100 rounded text-gray-600 hover:text-gray-800"
-          title="Quote"
-        >
-          <Quote className="w-4 h-4" />
-        </button>
-        <div className="w-px h-4 bg-gray-300 mx-1" />
-        <button
-          type="button"
-          className="p-1 hover:bg-gray-100 rounded text-gray-600 hover:text-gray-800"
-          title="Insert Link"
-          onClick={() => {
-            const url = prompt('Enter URL:')
-            if (url) executeCommand('createLink', url)
-          }}
-        >
-          <LinkIcon className="w-4 h-4" />
-        </button>
-        <button
-          type="button"
-          className="p-1 hover:bg-gray-100 rounded text-gray-600 hover:text-gray-800"
-          title="Insert Image"
-          onClick={() => {
-            const input = document.createElement('input')
-            input.type = 'file'
-            input.accept = 'image/*'
-            input.onchange = (e) => {
-              const file = (e.target as HTMLInputElement).files?.[0]
-              if (file) {
-                const reader = new FileReader()
-                reader.onload = (event) => {
-                  executeCommand('insertImage', event.target?.result as string)
-                }
-                reader.readAsDataURL(file)
-              }
-            }
-            input.click()
-          }}
-        >
-          <ImageIcon className="w-4 h-4" />
-        </button>
-      </div>
-
-      {/* Editor */}
-      <div
-        className="rich-editor-content min-h-[120px] p-3 prose prose-base max-w-none focus:outline-none"
-        contentEditable
-        suppressContentEditableWarning
-        onInput={(e) => onChange(e.currentTarget.innerHTML)}
-        onFocus={() => setIsToolbarVisible(true)}
-        onBlur={() => setTimeout(() => setIsToolbarVisible(false), 200)}
-        dangerouslySetInnerHTML={{ __html: content || `<p>${placeholder}</p>` }}
-      />
-    </div>
-  )
+export async function generateStaticParams() {
+  const recipes = getAllRecipes()
+  return recipes.map((recipe) => ({
+    slug: recipe.slug,
+  }))
 }
 
-
-export default function RecipePage({ params }: RecipePageProps) {
-  const [recipe, setRecipe] = useState<Recipe | null>(null)
-  const [relatedRecipes, setRelatedRecipes] = useState<Recipe[]>([])
-  const [loading, setLoading] = useState(true)
-  const [editableSlug, setEditableSlug] = useState('')
-  const [isSlugSaving, setIsSlugSaving] = useState(false)
-
-  useEffect(() => {
-    const fetchRecipe = async () => {
-      try {
-        const response = await fetch(`/api/recipes/${params.slug}`)
-        if (!response.ok) {
-          throw new Error('Recipe not found')
-        }
-        const recipeData = await response.json()
-        setRecipe(recipeData)
-        setEditableSlug(recipeData.slug) // Initialize editable slug with current slug
-
-        // Fetch related recipes
-        const allRecipesResponse = await fetch('/api/recipes')
-        if (allRecipesResponse.ok) {
-          const allRecipes = await allRecipesResponse.json()
-          const related = allRecipes
-            .filter((r: Recipe) => r.slug !== params.slug && r.category.toLowerCase() === recipeData.category.toLowerCase())
-            .slice(0, 4)
-          setRelatedRecipes(related)
-        }
-      } catch (error) {
-        console.error('Error fetching recipe:', error)
-        notFound()
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchRecipe()
-  }, [params.slug])
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading recipe...</p>
-        </div>
-      </div>
-    )
-  }
-
+export default async function RecipePage({ params }: RecipePageProps) {
+  const recipe = getRecipeBySlug(params.slug)
+  
   if (!recipe) {
     notFound()
   }
+
+  const relatedRecipes = getRelatedRecipes(params.slug, recipe.category, 4)
 
   return (
     <div className="min-h-screen bg-white">
@@ -210,77 +45,6 @@ export default function RecipePage({ params }: RecipePageProps) {
           </span>
         </nav>
 
-        {/* Slug Input Field */}
-        <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Recipe URL Slug
-          </label>
-          <div className="flex items-center space-x-2">
-            <span className="text-gray-500 text-sm">neerafoodlab.com/recipes/</span>
-            <input
-              type="text"
-              value={editableSlug}
-              onChange={(e) => {
-                const newSlug = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
-                setEditableSlug(newSlug)
-              }}
-              className={`flex-1 px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm ${
-                editableSlug !== recipe?.slug ? 'border-orange-300 bg-orange-50' : 'border-gray-300'
-              }`}
-              placeholder="recipe-slug"
-            />
-            <button
-              className="px-3 py-2 bg-primary-600 text-white text-sm rounded-md hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={isSlugSaving || editableSlug === recipe?.slug}
-              onClick={async () => {
-                if (!recipe || editableSlug === recipe.slug) return
-
-                setIsSlugSaving(true)
-                try {
-                  const response = await fetch(`/api/recipes/${recipe.slug}`, {
-                    method: 'PATCH',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ slug: editableSlug }),
-                  })
-
-                  if (response.ok) {
-                    const updatedRecipe = await response.json()
-                    // Update the recipe slug in state
-                    setRecipe(updatedRecipe.recipe)
-                    setEditableSlug(updatedRecipe.recipe.slug)
-
-                    // Update the URL in the browser
-                    window.history.replaceState({}, '', `/recipes/${updatedRecipe.recipe.slug}`)
-
-                    alert('Slug updated successfully!')
-                  } else {
-                    const errorData = await response.json()
-                    alert(`Failed to update slug: ${errorData.error}`)
-                  }
-                } catch (error) {
-                  console.error('Error updating slug:', error)
-                  alert('Failed to update slug. Please try again.')
-                } finally {
-                  setIsSlugSaving(false)
-                }
-              }}
-            >
-              {isSlugSaving ? 'Saving...' : 'Save'}
-            </button>
-          </div>
-          <div className="flex items-center justify-between mt-1">
-            <p className="text-xs text-gray-500">
-              Changing the slug will update the recipe URL. Use lowercase letters, numbers, and hyphens only.
-            </p>
-            {editableSlug !== recipe?.slug && (
-              <span className="text-xs text-orange-600 font-medium">
-                Unsaved changes
-              </span>
-            )}
-          </div>
-        </div>
       </div>
 
       {/* Hero Section */}
@@ -310,12 +74,7 @@ export default function RecipePage({ params }: RecipePageProps) {
           </div>
           
           {/* Recipe Title */}
-          <h1
-            className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight"
-            contentEditable={true}
-            suppressContentEditableWarning={true}
-            style={{ outline: 'none', padding: '0.5rem 0' }}
-          >
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
             {recipe.title}
           </h1>
           
@@ -336,13 +95,9 @@ export default function RecipePage({ params }: RecipePageProps) {
           </div>
           
           {/* Description */}
-          <RichTextEditor
-            content={recipe.description}
-            onChange={(content) => {
-              // Update recipe description
-              console.log('Description updated:', content)
-            }}
-            placeholder="Write a compelling description for your recipe..."
+          <div 
+            className="prose prose-base max-w-none"
+            dangerouslySetInnerHTML={{ __html: recipe.description }}
           />
         </div>
       </div>
@@ -368,12 +123,7 @@ export default function RecipePage({ params }: RecipePageProps) {
 
             {/* Ingredients */}
             <div className="mb-8">
-              <h2
-                className="text-2xl font-bold text-gray-900 mb-6"
-                contentEditable={true}
-                suppressContentEditableWarning={true}
-                style={{ outline: 'none', padding: '0.25rem 0' }}
-              >
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
                 Ingredients
               </h2>
               <div className="bg-gray-50 rounded-xl p-6">
@@ -393,73 +143,19 @@ export default function RecipePage({ params }: RecipePageProps) {
 
             {/* Instructions */}
             <div className="mb-8">
-              <h2
-                className="text-2xl font-bold text-gray-900 mb-6"
-                contentEditable={true}
-                suppressContentEditableWarning={true}
-                style={{ outline: 'none', padding: '0.25rem 0' }}
-              >
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
                 Instructions
               </h2>
               <div className="space-y-8">
                 {recipe.instructions && recipe.instructions.length > 0 ? (
                   recipe.instructions.map((instruction, index) => (
                     <div key={index} className="flex-1">
-                      <div className="relative">
-                        <h3
-                          className="font-semibold text-gray-900 mb-2"
-                          contentEditable={true}
-                          suppressContentEditableWarning={true}
-                          style={{ outline: 'none', padding: '0.25rem 0' }}
-                        >
-                          {instruction.title}
-                        </h3>
-                        {/* Image insertion button for titles */}
-                        <button
-                          type="button"
-                          className="image-insert-btn absolute -top-1 -right-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-medium shadow-lg transition-colors duration-200"
-                          onClick={() => {
-                            const input = document.createElement('input');
-                            input.type = 'file';
-                            input.accept = 'image/*';
-                            input.onchange = (e) => {
-                              const file = (e.target as HTMLInputElement).files?.[0];
-                              if (file) {
-                                const reader = new FileReader();
-                                reader.onload = (event) => {
-                                  const img = document.createElement('img');
-                                  img.src = event.target?.result as string;
-                                  img.style.maxWidth = '100%';
-                                  img.style.height = 'auto';
-                                  img.style.aspectRatio = '4/3';
-                                  img.className = 'rounded-lg shadow-sm my-2';
-
-                                  const selection = window.getSelection();
-                                  if (selection?.rangeCount) {
-                                    const range = selection.getRangeAt(0);
-                                    range.insertNode(img);
-                                    range.collapse(false);
-                                    selection.removeAllRanges();
-                                    selection.addRange(range);
-                                  }
-                                };
-                                reader.readAsDataURL(file);
-                              }
-                            };
-                            input.click();
-                          }}
-                          title="Insert Image (4:3 aspect ratio)"
-                        >
-                          📷
-                        </button>
-                      </div>
-                      <RichTextEditor
-                        content={instruction.description}
-                        onChange={(content) => {
-                          // Update instruction description
-                          console.log('Instruction updated:', content)
-                        }}
-                        placeholder="Write detailed cooking instructions..."
+                      <h3 className="font-semibold text-gray-900 mb-2">
+                        {instruction.title}
+                      </h3>
+                      <div 
+                        className="prose prose-base max-w-none"
+                        dangerouslySetInnerHTML={{ __html: instruction.description }}
                       />
                       {instruction.image && (
                         <div className="mt-4">
