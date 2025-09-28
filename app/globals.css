@@ -17,6 +17,81 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading font-bold;
   }
+
+  h1 {
+    line-height: 1.4;
+  }
+
+  /* Rich text editor images */
+  .prose img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin: 1rem 0;
+  }
+
+  /* ContentEditable focus styles */
+  [contenteditable]:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
+  /* Image insertion button styles */
+  .image-insert-btn {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .relative:hover .image-insert-btn {
+    opacity: 1;
+  }
+
+  /* Rich text editor styles */
+  .rich-editor-toolbar {
+    background: white;
+    border: 1px solid #d1d5db;
+    border-bottom: none;
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+
+  .rich-editor-toolbar button {
+    transition: all 0.2s ease;
+  }
+
+  .rich-editor-toolbar button:hover {
+    background-color: #f3f4f6;
+    color: #1f2937;
+  }
+
+  .rich-editor-content {
+    border: 1px solid #d1d5db;
+    border-top: none;
+    border-radius: 0 0 0.5rem 0.5rem;
+    min-height: 120px;
+  }
+
+  .rich-editor-content:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 1px #3b82f6;
+  }
+
+  /* Tag styles */
+  .recipe-tag {
+    background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    transition: all 0.2s ease;
+  }
+
+  .recipe-tag:hover {
+    background: linear-gradient(135deg, #bfdbfe 0%, #c7d2fe 100%);
+    border-color: #93c5fd;
+    color: #1e40af;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+  }
 }
 
 @layer components {

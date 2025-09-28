@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { Recipe } from '@/types/recipe'
-import { 
-  Edit, 
-  Trash2, 
-  Save, 
-  Plus, 
-  Eye, 
-  EyeOff, 
-  Filter, 
+import {
+  Edit,
+  Trash2,
+  Plus,
+  Eye,
+  EyeOff,
+  Filter,
   Search,
   Calendar,
   Tag,
@@ -40,9 +39,6 @@ const AdminDashboard = ({ initialRecipes }: AdminDashboardProps) => {
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(initialRecipes)
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
   const [searchQuery, setSearchQuery] = useState('')
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [editForm, setEditForm] = useState<Partial<Recipe>>({})
-  const [isCreating, setIsCreating] = useState(false)
   const [feedback, setFeedback] = useState<ActionFeedback>({ type: 'info', message: '', visible: false })
 
   // Filter and search recipes
@@ -71,24 +67,6 @@ const AdminDashboard = ({ initialRecipes }: AdminDashboardProps) => {
     setTimeout(() => setFeedback(prev => ({ ...prev, visible: false })), 3000)
   }
 
-  const handleEdit = (recipe: Recipe) => {
-    setEditingId(recipe.slug)
-    setEditForm(recipe)
-  }
-
-  const handleSave = async (slug: string) => {
-    try {
-      const updatedRecipes = recipes.map(recipe => 
-        recipe.slug === slug ? { ...recipe, ...editForm, updatedAt: new Date().toISOString() } : recipe
-      )
-      setRecipes(updatedRecipes)
-      setEditingId(null)
-      setEditForm({})
-      showFeedback('success', 'Recipe updated successfully!')
-    } catch (error) {
-      showFeedback('error', 'Failed to update recipe. Please try again.')
-    }
-  }
 
   const handleDelete = async (slug: string) => {
     if (!confirm('Are you sure you want to delete this recipe? This action cannot be undone.')) {
@@ -123,11 +101,6 @@ const AdminDashboard = ({ initialRecipes }: AdminDashboardProps) => {
     }
   }
 
-  const handleCancel = () => {
-    setEditingId(null)
-    setEditForm({})
-    setIsCreating(false)
-  }
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -157,13 +130,13 @@ const AdminDashboard = ({ initialRecipes }: AdminDashboardProps) => {
             <h1 className="text-3xl font-bold text-gray-900">Recipe Management</h1>
             <p className="text-gray-600 mt-1">Manage your recipes, content, and website settings</p>
           </div>
-          <button
-            onClick={() => setIsCreating(true)}
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          <a
+            href="/content/recipes"
+            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-decoration-none"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add New Recipe
-          </button>
+          </a>
         </div>
 
         {/* Stats */}
@@ -281,19 +254,10 @@ const AdminDashboard = ({ initialRecipes }: AdminDashboardProps) => {
               {filteredRecipes.map((recipe) => (
                 <tr key={recipe.slug} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {editingId === recipe.slug ? (
-                      <input
-                        type="text"
-                        value={editForm.title || ''}
-                        onChange={(e) => setEditForm(prev => ({ ...prev, title: e.target.value }))}
-                        className="text-sm font-medium text-gray-900 border border-gray-300 rounded px-2 py-1 w-full"
-                      />
-                    ) : (
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">{recipe.title}</div>
-                        <div className="text-sm text-gray-500">{recipe.description?.substring(0, 60)}...</div>
-                      </div>
-                    )}
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">{recipe.title}</div>
+                      <div className="text-sm text-gray-500">{recipe.description?.substring(0, 60)}...</div>
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={getStatusBadge(recipe.status)}>
@@ -301,19 +265,10 @@ const AdminDashboard = ({ initialRecipes }: AdminDashboardProps) => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {editingId === recipe.slug ? (
-                      <input
-                        type="text"
-                        value={editForm.category || ''}
-                        onChange={(e) => setEditForm(prev => ({ ...prev, category: e.target.value }))}
-                        className="text-sm text-gray-900 border border-gray-300 rounded px-2 py-1 w-full"
-                      />
-                    ) : (
-                      <div className="flex items-center">
-                        <Tag className="w-3 h-3 mr-1 text-gray-400" />
-                        <span className="text-sm text-gray-900">{recipe.category}</span>
-                      </div>
-                    )}
+                    <div className="flex items-center">
+                      <Tag className="w-3 h-3 mr-1 text-gray-400" />
+                      <span className="text-sm text-gray-900">{recipe.category}</span>
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center text-sm text-gray-500">
@@ -339,60 +294,39 @@ const AdminDashboard = ({ initialRecipes }: AdminDashboardProps) => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end space-x-2">
-                      {editingId === recipe.slug ? (
-                        <>
-                          <button
-                            onClick={() => handleSave(recipe.slug)}
-                            className="text-green-600 hover:text-green-900 p-1 rounded"
-                            title="Save changes"
-                          >
-                            <Save className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={handleCancel}
-                            className="text-gray-600 hover:text-gray-900 p-1 rounded"
-                            title="Cancel"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <button
-                            onClick={() => handleEdit(recipe)}
-                            className="text-blue-600 hover:text-blue-900 p-1 rounded"
-                            title="Edit recipe"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleToggleStatus(recipe.slug)}
-                            className={`p-1 rounded ${
-                              recipe.status === 'published' 
-                                ? 'text-yellow-600 hover:text-yellow-900' 
-                                : 'text-green-600 hover:text-green-900'
-                            }`}
-                            title={recipe.status === 'published' ? 'Move to draft' : 'Publish recipe'}
-                          >
-                            {recipe.status === 'published' ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                          </button>
-                          <a
-                            href={`/recipes/${recipe.slug}`}
-                            target="_blank"
-                            className="text-gray-600 hover:text-gray-900 p-1 rounded"
-                            title="View recipe"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                          </a>
-                          <button
-                            onClick={() => handleDelete(recipe.slug)}
-                            className="text-red-600 hover:text-red-900 p-1 rounded"
-                            title="Delete recipe"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </>
-                      )}
+                      <a
+                        href={`/content/recipes?edit=${recipe.slug}`}
+                        className="text-blue-600 hover:text-blue-900 p-1 rounded"
+                        title="Edit recipe"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </a>
+                      <button
+                        onClick={() => handleToggleStatus(recipe.slug)}
+                        className={`p-1 rounded ${
+                          recipe.status === 'published'
+                            ? 'text-yellow-600 hover:text-yellow-900'
+                            : 'text-green-600 hover:text-green-900'
+                        }`}
+                        title={recipe.status === 'published' ? 'Move to draft' : 'Publish recipe'}
+                      >
+                        {recipe.status === 'published' ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                      <a
+                        href={`/recipes/${recipe.slug}`}
+                        target="_blank"
+                        className="text-gray-600 hover:text-gray-900 p-1 rounded"
+                        title="View recipe"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                      <button
+                        onClick={() => handleDelete(recipe.slug)}
+                        className="text-red-600 hover:text-red-900 p-1 rounded"
+                        title="Delete recipe"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   </td>
                 </tr>

@@ -270,3 +270,5 @@ Visit: `http://localhost:3000/admin`
 Your admin dashboard is now a powerful content management system that will make managing your 100+ recipes a breeze! The combination of intuitive design, powerful features, and mobile responsiveness ensures you can manage your food blog efficiently from anywhere.
 
 **Ready to start managing your recipes like a pro?** 🚀
+
+

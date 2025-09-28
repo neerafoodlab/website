@@ -57,12 +57,29 @@ export function getRecipeBySlug(slug: string): Recipe | null {
 
 export function getRelatedRecipes(currentSlug: string, category: string, limit: number = 3): Recipe[] {
   const allRecipes = getAllRecipes()
-  return allRecipes
-    .filter(recipe => 
-      recipe.slug !== currentSlug && 
+
+  // First, get recipes from the same category
+  const sameCategoryRecipes = allRecipes
+    .filter(recipe =>
+      recipe.slug !== currentSlug &&
       recipe.category.toLowerCase() === category.toLowerCase()
     )
-    .slice(0, limit)
+
+  // If we have enough recipes from the same category, return them
+  if (sameCategoryRecipes.length >= limit) {
+    return sameCategoryRecipes.slice(0, limit)
+  }
+
+  // If we don't have enough from the same category, fill with other recipes
+  const otherRecipes = allRecipes
+    .filter(recipe => recipe.slug !== currentSlug)
+    .filter(recipe => !sameCategoryRecipes.some(sameCat => sameCat.slug === recipe.slug))
+    .slice(0, limit - sameCategoryRecipes.length)
+
+  // Combine same category recipes with other recipes
+  const relatedRecipes = [...sameCategoryRecipes, ...otherRecipes]
+
+  return relatedRecipes.slice(0, limit)
 }
 
 export function searchRecipes(query: string): Recipe[] {

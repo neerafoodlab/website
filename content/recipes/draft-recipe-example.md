@@ -81,3 +81,5 @@ This authentic masala chai recipe brings together the perfect blend of warming s
 The secret to great masala chai lies in the balance of spices and the proper boiling technique. This recipe creates a rich, aromatic tea that's perfect for any time of day.
 
 *Note: This is a draft recipe - still testing the perfect spice ratios!*
+
+

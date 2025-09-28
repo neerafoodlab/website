@@ -8,20 +8,39 @@ const Newsletter = () => {
   const [email, setEmail] = useState('')
   const [isSubscribed, setIsSubscribed] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError('')
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    setIsSubscribed(true)
-    setIsLoading(false)
-    setEmail('')
-    
-    // Reset after 3 seconds
-    setTimeout(() => setIsSubscribed(false), 3000)
+    try {
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setIsSubscribed(true)
+        setEmail('')
+        // Reset after 5 seconds
+        setTimeout(() => setIsSubscribed(false), 5000)
+      } else {
+        console.error('Newsletter subscription failed:', data)
+        setError(data.error || 'Failed to subscribe. Please try again.')
+      }
+    } catch (error) {
+      console.error('Newsletter subscription error:', error)
+      setError('Network error. Please check your connection and try again.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -76,6 +95,11 @@ const Newsletter = () => {
               <p className="text-primary-100 text-sm mt-3">
                 No spam, unsubscribe at any time. We respect your privacy.
               </p>
+              {error && (
+                <p className="text-red-200 text-sm mt-2 bg-red-500/20 px-3 py-2 rounded-lg">
+                  {error}
+                </p>
+              )}
             </motion.form>
           ) : (
             <motion.div

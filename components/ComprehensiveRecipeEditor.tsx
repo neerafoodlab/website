@@ -98,6 +98,7 @@ export default function ComprehensiveRecipeEditor({ initialData, onSave, isEditi
   const [submitMessage, setSubmitMessage] = useState('')
   const [activeTab, setActiveTab] = useState('basic')
 
+
   const handleInputChange = (field: keyof RecipeFormData, value: string | boolean) => {
     setFormData(prev => ({
       ...prev,
@@ -656,7 +657,7 @@ It usually happens if oil is too hot—always fry on low to medium heat."
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Ingredients</label>
               <p className="text-sm text-gray-600 mb-3">
-                Enter ingredients as shown in your example. Format: "Quantity – Ingredient name" (one per line)
+                Enter ingredients as shown in your example. Format: &ldquo;Quantity &ndash; Ingredient name&rdquo; (one per line)
               </p>
               <textarea
                 value={formData.ingredients}
@@ -682,7 +683,7 @@ Salt – to taste"
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Use the format from your example: "Quantity – Ingredient description". Each ingredient on a new line.
+                Use the format from your example: &ldquo;Quantity &ndash; Ingredient description&rdquo;. Each ingredient on a new line.
               </p>
             </div>
           </div>
@@ -721,7 +722,8 @@ Serve hot with tamarind or green chutney."
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Enter one step per line. Steps will be automatically numbered in the final output.
+                Enter one step per line. Steps will be automatically numbered in the final output.<br/>
+                <strong>Note:</strong> To add images to steps, manually edit the markdown file to include image URLs in the instructions array.
               </p>
             </div>
           </div>

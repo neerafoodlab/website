@@ -1,19 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Only use static export for production builds
-  ...(process.env.NODE_ENV === 'production' && {
-    output: 'export',
-    trailingSlash: true,
-    images: {
-      unoptimized: true
-    }
-  }),
-  // Development images configuration
-  ...(process.env.NODE_ENV === 'development' && {
-    images: {
-      domains: ['img.youtube.com', 'i.ytimg.com']
-    }
-  }),
+  images: {
+    domains: ['img.youtube.com', 'i.ytimg.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+      },
+    ],
+  },
   experimental: {
     optimizePackageImports: ['framer-motion']
   },

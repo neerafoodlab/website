@@ -49,11 +49,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/brand/neerafoodlab_favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/brand/neerafoodlab_favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/brand/neerafoodlab_favicon.png', sizes: '16x16', type: 'image/png' },
+      { url: '/brand/neerafoodlab_favicon.png', sizes: '32x32', type: 'image/png' },
     ],
     apple: [
-      { url: '/brand/neerafoodlab_favicon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/brand/neerafoodlab_favicon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
 }
@@ -67,13 +67,13 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="canonical" href="https://www.neerafoodlab.com" />
-        <link rel="icon" href="/brand/neerafoodlab_favicon.ico" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/brand/neerafoodlab_favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/brand/neerafoodlab_favicon-16x16.png" />
-        <link rel="apple-touch-icon" sizes="192x192" href="/brand/neerafoodlab_favicon-192x192.png" />
+        <link rel="icon" href="/brand/neerafoodlab_favicon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/brand/neerafoodlab_favicon.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/brand/neerafoodlab_favicon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/brand/neerafoodlab_favicon.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        <meta property="og:image" content="/brand/neerafoodlab_og-image.png" />
-        <meta name="twitter:image" content="/brand/neerafoodlab_og-image.png" />
+        <meta property="og:image" content="/brand/neerafoodlab_favicon.png" />
+        <meta name="twitter:image" content="/brand/neerafoodlab_favicon.png" />
       </head>
       <body className={inter.className}>
         <Header />

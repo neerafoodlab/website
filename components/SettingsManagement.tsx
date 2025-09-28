@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Edit, Save, X, CheckCircle, AlertCircle, Globe, Share2, Image, Settings } from 'lucide-react'
+import { Edit, Save, X, CheckCircle, AlertCircle, Globe, Share2, Settings, ImageIcon, Star } from 'lucide-react'
 
 interface SiteSettings {
   name: string
@@ -234,12 +234,12 @@ const SettingsManagement = () => {
         {/* Branding */}
         <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '0.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
           <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1.5rem', color: '#111827', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Image className="w-5 h-5" />
+            <ImageIcon className="w-5 h-5" />
             Branding & Assets
           </h3>
 
-          {renderField('Logo Path', 'logo', '/brand/logo.png', <Image className="w-4 h-4" />)}
-          {renderField('Favicon Path', 'favicon', '/brand/favicon.png', <Image className="w-4 h-4" />)}
+          {renderField('Logo Path', 'logo', '/brand/neerafoodlab_logo.png', <ImageIcon className="w-4 h-4" />)}
+          {renderField('Favicon Path', 'favicon', '/brand/neerafoodlab_favicon.png', <Star className="w-4 h-4" />)}
 
           <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '0.375rem', border: '1px solid #e2e8f0' }}>
             <h4 style={{ fontWeight: '600', marginBottom: '0.5rem', color: '#374151' }}>Current Assets</h4>

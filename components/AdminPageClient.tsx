@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { Recipe } from '@/types/recipe'
 import AdminDashboard from '@/components/AdminDashboard'
-import EasyRecipeForm from '@/components/EasyRecipeForm'
 import PageManagement from '@/components/PageManagement'
 import SettingsManagement from '@/components/SettingsManagement'
 
@@ -18,8 +17,6 @@ export default function AdminPageClient({ recipes }: AdminPageClientProps) {
     switch (currentView) {
       case 'recipes':
         return <AdminDashboard initialRecipes={recipes} />
-      case 'add-recipe':
-        return <EasyRecipeForm />
       case 'pages':
         return <PageManagement />
       case 'settings':
@@ -67,20 +64,22 @@ export default function AdminPageClient({ recipes }: AdminPageClientProps) {
               >
                 Manage Recipes
               </button>
-              <button
-                onClick={() => setCurrentView('add-recipe')}
+              <a
+                href="/content/recipes"
                 style={{
                   padding: '0.5rem 1rem',
-                  backgroundColor: currentView === 'add-recipe' ? '#10b981' : 'transparent',
-                  color: currentView === 'add-recipe' ? 'white' : '#374151',
-                  border: currentView === 'add-recipe' ? 'none' : '1px solid #d1d5db',
+                  backgroundColor: '#10b981',
+                  color: 'white',
+                  border: 'none',
                   borderRadius: '0.375rem',
                   cursor: 'pointer',
-                  fontSize: '0.875rem'
+                  fontSize: '0.875rem',
+                  textDecoration: 'none',
+                  display: 'inline-block'
                 }}
               >
                 + Add Recipe
-              </button>
+              </a>
               <button
                 onClick={() => setCurrentView('pages')}
                 style={{
@@ -189,12 +188,12 @@ const DashboardView = ({ recipes, setCurrentView }: { recipes: Recipe[], setCurr
         <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
           <h3 style={{ fontSize: '1.2rem', fontWeight: '600', marginBottom: '1rem', color: '#111827' }}>Quick Actions</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <button 
-              onClick={() => setCurrentView('add-recipe')}
-              style={{ padding: '0.75rem', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '0.375rem', cursor: 'pointer', fontSize: '0.875rem' }}
+            <a 
+              href="/content/recipes"
+              style={{ padding: '0.75rem', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '0.375rem', cursor: 'pointer', fontSize: '0.875rem', textDecoration: 'none', display: 'block', textAlign: 'center' }}
             >
               📝 Add New Recipe
-            </button>
+            </a>
             <button 
               onClick={() => setCurrentView('recipes')}
               style={{ padding: '0.75rem', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '0.375rem', cursor: 'pointer', fontSize: '0.875rem' }}

@@ -1,14 +1,4 @@
-import Image from 'next/image'
-import { Heart, Users, Award, BookOpen } from 'lucide-react'
-
 export default function AboutPage() {
-  const stats = [
-    { icon: BookOpen, label: 'Recipes Published', value: '300+' },
-    { icon: Users, label: 'Happy Readers', value: '50K+' },
-    { icon: Award, label: 'Years of Experience', value: '10+' },
-    { icon: Heart, label: 'Recipes Loved', value: '1M+' },
-  ]
-
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -19,130 +9,121 @@ export default function AboutPage() {
               About <span className="text-gradient">Neera Food Lab</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Welcome to my culinary journey! I&apos;m passionate about sharing authentic Indian recipes
-              and helping you create delicious meals that bring families together.
+              Welcome to Neera Food Lab—where vegetarian magic happens in every kitchen!
             </p>
           </div>
         </div>
       </section>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
-          {/* Story */}
-          <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-gray-900">My Story</h2>
-            <div className="space-y-4 text-gray-600 leading-relaxed">
-              <p>
-                Growing up in a traditional Indian household, I was surrounded by the aromas of
-                spices and the warmth of home-cooked meals. My grandmother&apos;s kitchen was my
-                first classroom, where I learned that cooking is not just about following recipes,
-                but about creating memories and sharing love.
-              </p>
-              <p>
-                After moving to the United States, I realized how much I missed the authentic 
-                flavors of home. This led me to start documenting family recipes and experimenting 
-                with traditional techniques to recreate those cherished dishes in my new kitchen.
-              </p>
-              <p>
-                Neera Food Lab was born from this desire to preserve and share the rich culinary 
-                heritage of India while making it accessible to home cooks everywhere.
-              </p>
-            </div>
-          </div>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Introduction */}
+        <div className="mb-12">
+          <p className="text-lg text-gray-700 leading-relaxed mb-6">
+            I&apos;m Neera Sharma, the food lover, experimenter, and creator behind Neera Food Lab.
+            Cooking isn&apos;t just my passion—it&apos;s my way of bringing joy, flavor, and a dash of creativity to everyday life.
+            My goal? Making delicious Indian and fusion recipes so simple and inviting, anyone can try them!
+          </p>
+        </div>
 
-          {/* Image */}
-          <div className="relative">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-              <Image
-                src="/images/about-chef.jpg"
-                alt="Neera in her kitchen"
-                width={500}
-                height={600}
-                className="w-full h-96 lg:h-[500px] object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+        {/* What We're All About */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">What We&apos;re All About</h2>
+          <p className="text-lg text-gray-700 leading-relaxed mb-4">
+            At Neera Food Lab, you&apos;ll find—
+          </p>
+          <ul className="text-gray-700 leading-relaxed space-y-2 mb-6">
+            <li>Easy, step-by-step Indian vegetarian recipes for every mood, festival, or craving.</li>
+            <li>Fun, fuss-free snack ideas for kids and adults.</li>
+            <li>Unique twists on traditional street foods and festive sweets.</li>
+            <li>Quick meals and time-saving tips designed for busy lives.</li>
+            <li>Engaging, creative content—ready in under a minute!</li>
+          </ul>
+          <p className="text-lg text-gray-700 leading-relaxed">
+            Whether you&apos;re a seasoned home cook or a curious beginner, Neera Food Lab is your home for delicious inspiration.
+          </p>
+        </div>
+
+        {/* Why Follow */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">Why Follow Neera Food Lab?</h2>
+          <ul className="text-gray-700 leading-relaxed space-y-4">
+            <li>
+              <strong>Approachable Cooking:</strong> Recipes are designed for everyone—simple enough for beginners, exciting enough for foodies.
+            </li>
+            <li>
+              <strong>Flavor Experiments:</strong> We love playing with spices, textures, and trending ideas—there&apos;s always something new!
+            </li>
+            <li>
+              <strong>Vegetarian Only:</strong> 100% vegetarian, with a strong focus on Indian home-style comfort recipes, healthy options, and fusion snacks.
+            </li>
+            <li>
+              <strong>Community First:</strong> Making cooking fun, interactive, and accessible to all—join our growing family of food explorers!
+            </li>
+          </ul>
+        </div>
+
+        {/* Where You'll Find Us */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">Where You&apos;ll Find Us</h2>
+          <p className="text-lg text-gray-700 leading-relaxed mb-6">
+            Catch our daily recipes, quick cooking videos, and flavor-packed inspiration here and on:
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <a href="https://www.instagram.com/neerafoodlab/" className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 rounded-lg text-center hover:opacity-90 transition-opacity">
+              <strong>Instagram</strong>
+            </a>
+            <a href="https://www.youtube.com/@neerafoodlab" className="bg-red-600 text-white p-4 rounded-lg text-center hover:opacity-90 transition-opacity">
+              <strong>YouTube</strong>
+            </a>
+            <a href="https://www.x.com/neerafoodlab/" className="bg-black text-white p-4 rounded-lg text-center hover:opacity-90 transition-opacity">
+              <strong>X (Twitter)</strong>
+            </a>
+            <a href="https://www.threads.net/@neerafoodlab" className="bg-gray-900 text-white p-4 rounded-lg text-center hover:opacity-90 transition-opacity">
+              <strong>Threads</strong>
+            </a>
+            <a href="https://www.reddit.com/user/neerafoodlab/" className="bg-orange-600 text-white p-4 rounded-lg text-center hover:opacity-90 transition-opacity">
+              <strong>Reddit</strong>
+            </a>
+            <div className="bg-gray-100 text-gray-600 p-4 rounded-lg text-center">
+              <strong>...and more!</strong>
             </div>
           </div>
+          <p className="text-lg text-gray-700 leading-relaxed mt-6">
+            Got a craving or a food question? Message anytime or drop a comment—I love connecting with fellow foodies!
+          </p>
         </div>
 
         {/* Mission */}
-        <div className="text-center mb-20">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">My Mission</h2>
-          <div className="max-w-4xl mx-auto">
-            <p className="text-xl text-gray-600 leading-relaxed mb-8">
-              To make authentic Indian cuisine accessible to everyone, regardless of their cooking 
-              experience or access to traditional ingredients. I believe that food has the power 
-              to connect us across cultures and create lasting memories.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Heart className="w-8 h-8 text-primary-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Authentic Recipes</h3>
-                <p className="text-gray-600">Traditional family recipes passed down through generations</p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <BookOpen className="w-8 h-8 text-secondary-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Easy to Follow</h3>
-                <p className="text-gray-600">Step-by-step instructions with helpful tips and tricks</p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="w-8 h-8 text-primary-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Community</h3>
-                <p className="text-gray-600">A supportive community of food lovers and home cooks</p>
-              </div>
-            </div>
-          </div>
+        <div className="bg-primary-50 rounded-2xl p-8 mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Our Mission</h2>
+          <p className="text-xl text-gray-700 leading-relaxed text-center">
+            To make vegetarian cooking fun, creative, and super easy—one step-by-step recipe at a time.
+            From lunchbox wonders to festival feasts, Neera Food Lab is here to inspire your inner chef
+            and add a burst of flavor to your kitchen.
+          </p>
         </div>
 
-        {/* Stats */}
-        <div className="bg-gray-50 rounded-2xl p-12 mb-20">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">By the Numbers</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => {
-              const Icon = stat.icon
-              return (
-                <div key={index} className="text-center">
-                  <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Icon className="w-8 h-8 text-white" />
-                  </div>
-                  <div className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</div>
-                  <div className="text-gray-600">{stat.label}</div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Personal Touch */}
+        {/* Call to Action */}
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Let&apos;s Cook Together</h2>
-          <div className="max-w-3xl mx-auto">
-            <p className="text-xl text-gray-600 leading-relaxed mb-8">
-              I&apos;m always excited to hear from fellow food enthusiasts! Whether you&apos;re trying
-              one of my recipes for the first time or you&apos;re a seasoned cook looking for new
-              inspiration, I&apos;d love to connect with you.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="/contact"
-                className="btn-primary inline-flex items-center justify-center"
-              >
-                Get in Touch
-              </a>
-              <a
-                href="/recipes"
-                className="btn-outline inline-flex items-center justify-center"
-              >
-                Explore Recipes
-              </a>
-            </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">Let&apos;s Cook Up Some Magic Together</h2>
+          <p className="text-xl text-gray-600 leading-relaxed mb-8 max-w-3xl mx-auto">
+            Join thousands of food lovers who are already part of our culinary community.
+            Let&apos;s create delicious memories, one recipe at a time!
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="/recipes"
+              className="btn-primary inline-flex items-center justify-center"
+            >
+              Explore Recipes
+            </a>
+            <a
+              href="/contact"
+              className="btn-outline inline-flex items-center justify-center"
+            >
+              Get in Touch
+            </a>
           </div>
         </div>
       </div>
@@ -152,11 +133,11 @@ export default function AboutPage() {
 
 export async function generateMetadata() {
   return {
-    title: 'About Neera Food Lab - Our Story & Mission',
-    description: 'Learn about Neera Food Lab\'s journey in bringing authentic Indian cuisine to home cooks worldwide. Discover our mission and passion for food.',
+    title: 'About Neera Food Lab - Vegetarian Magic in Every Kitchen',
+    description: 'Discover Neera Food Lab - where vegetarian magic happens! Learn about our passion for Indian and fusion recipes, easy cooking tips, and building a community of food explorers.',
     openGraph: {
-      title: 'About Neera Food Lab - Our Story & Mission',
-      description: 'Learn about our journey in bringing authentic Indian cuisine to home cooks worldwide.',
+      title: 'About Neera Food Lab - Vegetarian Magic in Every Kitchen',
+      description: 'Discover Neera Food Lab - where vegetarian magic happens! Learn about our passion for Indian and fusion recipes.',
       url: 'https://www.neerafoodlab.com/about',
     },
   }

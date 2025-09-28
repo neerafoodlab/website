@@ -1,0 +1,12 @@
+[
+  {
+    "email": "test@example.com",
+    "subscribedAt": "2025-09-27T09:17:54.678Z",
+    "source": "website"
+  },
+  {
+    "email": "test@test.com",
+    "subscribedAt": "2025-09-27T19:24:46.528Z",
+    "source": "website"
+  }
+]

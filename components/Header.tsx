@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Menu, X, Search } from 'lucide-react'
+import { Menu, X, Instagram, Youtube, Facebook } from 'lucide-react'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -14,7 +14,6 @@ const Header = () => {
     { name: 'Recipes', href: '/recipes' },
     { name: 'Categories', href: '/categories' },
     { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
   ]
 
   return (
@@ -52,11 +51,53 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Search & Mobile Menu */}
+          {/* Social Media Icons & Mobile Menu */}
           <div className="flex items-center space-x-4">
-            <button className="p-2 text-brand-gray-700 hover:text-primary-500 transition-colors duration-200">
-              <Search className="w-5 h-5" />
-            </button>
+            {/* Social Media Icons */}
+            <div className="hidden md:flex items-center space-x-3">
+              <a
+                href="https://www.facebook.com/neerafoodlab/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-brand-gray-700 hover:text-blue-500 transition-colors duration-200"
+                aria-label="Facebook"
+              >
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a
+                href="https://www.instagram.com/neerafoodlab/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-brand-gray-700 hover:text-pink-500 transition-colors duration-200"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a
+                href="https://threads.net/@neerafoodlab"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-brand-gray-700 hover:text-gray-900 transition-colors duration-200"
+                aria-label="Threads"
+              >
+                <Image
+                  src="/brand/threads.png"
+                  alt="Threads"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5"
+                />
+              </a>
+              <a
+                href="https://www.youtube.com/@neerafoodlab"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-brand-gray-700 hover:text-red-500 transition-colors duration-200"
+                aria-label="YouTube"
+              >
+                <Youtube className="w-5 h-5" />
+              </a>
+            </div>
             
             {/* Mobile menu button */}
             <button
@@ -89,6 +130,52 @@ const Header = () => {
                 {item.name}
               </Link>
             ))}
+            
+            {/* Mobile Social Media Icons */}
+            <div className="flex items-center justify-center space-x-4 pt-4 border-t border-gray-200">
+              <a
+                href="https://www.facebook.com/neerafoodlab/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-brand-gray-700 hover:text-blue-500 transition-colors duration-200"
+                aria-label="Facebook"
+              >
+                <Facebook className="w-6 h-6" />
+              </a>
+              <a
+                href="https://www.instagram.com/neerafoodlab/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-brand-gray-700 hover:text-pink-500 transition-colors duration-200"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-6 h-6" />
+              </a>
+              <a
+                href="https://threads.net/@neerafoodlab"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-brand-gray-700 hover:text-gray-900 transition-colors duration-200"
+                aria-label="Threads"
+              >
+                <Image
+                  src="/brand/threads.png"
+                  alt="Threads"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6"
+                />
+              </a>
+              <a
+                href="https://www.youtube.com/@neerafoodlab"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-brand-gray-700 hover:text-red-500 transition-colors duration-200"
+                aria-label="YouTube"
+              >
+                <Youtube className="w-6 h-6" />
+              </a>
+            </div>
           </div>
         </motion.div>
       </div>

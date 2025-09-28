@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react'
+import { Facebook, Instagram, Mail, Phone, MapPin, Youtube } from 'lucide-react'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
@@ -19,9 +19,10 @@ const Footer = () => {
       { name: 'Terms of Service', href: '/terms' },
     ],
     social: [
-      { name: 'Facebook', href: '#', icon: Facebook },
-      { name: 'Instagram', href: '#', icon: Instagram },
-      { name: 'Twitter', href: '#', icon: Twitter },
+      { name: 'Facebook', href: 'https://www.facebook.com/neerafoodlab/', icon: Facebook },
+      { name: 'Instagram', href: 'https://www.instagram.com/neerafoodlab/', icon: Instagram },
+      { name: 'X (Twitter)', href: 'https://www.x.com/neerafoodlab/', icon: 'x' },
+      { name: 'YouTube', href: 'https://www.youtube.com/@neerafoodlab', icon: Youtube },
     ],
   }
 
@@ -53,7 +54,13 @@ const Footer = () => {
                     className="w-10 h-10 bg-brand-gray-800 rounded-lg flex items-center justify-center hover:bg-primary-500 transition-colors duration-200"
                     aria-label={social.name}
                   >
-                    <Icon className="w-5 h-5" />
+                    {Icon === 'x' ? (
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                      </svg>
+                    ) : (
+                      <Icon className="w-5 h-5" />
+                    )}
                   </a>
                 )
               })}
@@ -100,15 +107,12 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-primary-500" />
-                <span className="text-gray-300">hello@neerafoodlab.com</span>
+                <span className="text-gray-300">neerafoodlab@gmail.com</span>
               </div>
-              <div className="flex items-center space-x-3">
-                <Phone className="w-5 h-5 text-primary-500" />
-                <span className="text-gray-300">+1 (555) 123-4567</span>
-              </div>
+            
               <div className="flex items-center space-x-3">
                 <MapPin className="w-5 h-5 text-primary-500" />
-                <span className="text-gray-300">New York, NY</span>
+                <span className="text-gray-300">Mumbai, Maharashtra</span>
               </div>
             </div>
           </div>

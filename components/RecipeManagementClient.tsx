@@ -245,7 +245,8 @@ export default function RecipeManagementClient({ recipes }: Props) {
           {recipes.map((recipe) => (
             <div
               key={recipe.filename}
-              className="bg-white p-6 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              className="bg-white p-6 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+              onClick={() => handleEditRecipe(recipe)}
             >
               <div className="flex justify-between items-start">
                 <div className="flex-1">
@@ -267,17 +268,12 @@ export default function RecipeManagementClient({ recipes }: Props) {
                   </div>
                 </div>
                 <div className="flex gap-3 ml-6">
-                  <button
-                    onClick={() => handleEditRecipe(recipe)}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
-                  >
-                    ✏️ Edit Recipe
-                  </button>
                   <a
                     href={`/recipes/${recipe.filename}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     👁️ Preview
                   </a>
