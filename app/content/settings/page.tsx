@@ -1,290 +1,144 @@
-import fs from 'fs'
-import path from 'path'
+'use client'
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { getCurrentUser } from '@/lib/auth'
 
-interface SiteSettings {
-  name: string
-  description: string
-  logo: string
-  favicon: string
-  social: {
-    facebook: string
-    instagram: string
-    twitter: string
-    youtube: string
-  }
-}
+export default function SettingsPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-async function getSettings(): Promise<SiteSettings | null> {
-  try {
-    const settingsPath = path.join(process.cwd(), 'content/settings/site.json')
-    const settingsContent = fs.readFileSync(settingsPath, 'utf8')
-    return JSON.parse(settingsContent) as SiteSettings
-  } catch (error) {
-    console.error('Failed to load settings:', error)
-    return null
-  }
-}
+  useEffect(() => {
+    const checkAuth = () => {
+      try {
+        const user = getCurrentUser()
+        setIsAuthenticated(!!user)
+      } catch (error) {
+        console.error('Auth check error:', error)
+        setIsAuthenticated(false)
+      } finally {
+        setIsLoading(false)
+      }
+    }
 
-export default async function SettingsPage() {
-  const settings = await getSettings()
+    checkAuth()
+  }, [])
 
-  if (!settings) {
+  // Show loading state
+  if (isLoading) {
     return (
-      <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif', maxWidth: '1200px', margin: '0 auto' }}>
-        <Link
-          href="/admin"
-          style={{
-            backgroundColor: '#6b7280',
-            color: 'white',
-            padding: '0.5rem 1rem',
-            borderRadius: '0.375rem',
-            textDecoration: 'none',
-            fontSize: '0.875rem',
-            display: 'inline-block',
-            marginBottom: '1rem'
-          }}
-        >
-          ← Back to Admin
-        </Link>
-        <div style={{
-          backgroundColor: '#fef2f2',
-          color: '#dc2626',
-          padding: '1.5rem',
-          borderRadius: '0.5rem',
-          border: '1px solid #fecaca'
-        }}>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '0.5rem' }}>
-            Settings File Not Found
-          </h2>
-          <p>Could not load site settings. Please check that <code>content/settings/site.json</code> exists.</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Show login if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600 mb-6">You need to log in to access this page.</p>
+          <a
+            href="/admin"
+            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Go to Login
+          </a>
         </div>
       </div>
     )
   }
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <Link
-          href="/admin"
-          style={{
-            backgroundColor: '#6b7280',
-            color: 'white',
-            padding: '0.5rem 1rem',
-            borderRadius: '0.375rem',
-            textDecoration: 'none',
-            fontSize: '0.875rem',
-            display: 'inline-block',
-            marginBottom: '1rem'
-          }}
-        >
-          ← Back to Admin
-        </Link>
-        <h1 style={{ fontSize: '2rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>
-          Site Settings
-        </h1>
-        <p style={{ color: '#6b7280' }}>
-          Edit this JSON file to update your site configuration. File is located at <code>content/settings/site.json</code>
-        </p>
-      </div>
-
-      <div style={{
-        backgroundColor: 'white',
-        padding: '1.5rem',
-        borderRadius: '0.5rem',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        border: '1px solid #e5e7eb'
-      }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-          <div>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#111827', marginBottom: '0.25rem' }}>
-              Site Configuration
-            </h2>
-            <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>
-              {settings.description}
-            </p>
-          </div>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <Link
-              href="/"
-              style={{
-                backgroundColor: '#3b82f6',
-                color: 'white',
-                padding: '0.5rem 1rem',
-                borderRadius: '0.375rem',
-                textDecoration: 'none',
-                fontSize: '0.875rem',
-                fontWeight: '500'
-              }}
-            >
-              View Site
-            </Link>
-            <span
-              style={{
-                backgroundColor: '#f9fafb',
-                color: '#374151',
-                padding: '0.5rem 1rem',
-                borderRadius: '0.375rem',
-                fontSize: '0.875rem',
-                fontFamily: 'monospace',
-                border: '1px solid #e5e7eb'
-              }}
-            >
-              content/settings/site.json
-            </span>
-          </div>
-        </div>
-
-        <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '1rem' }}>
-          <h3 style={{ fontSize: '1rem', fontWeight: '600', color: '#374151', marginBottom: '0.5rem' }}>
-            File: site.json
-          </h3>
-
-          <div style={{ display: 'grid', gap: '1rem', marginBottom: '1rem' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-              <div>
-                <label style={{ fontSize: '0.875rem', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '0.25rem' }}>
-                  Site Name
-                </label>
-                <div style={{
-                  backgroundColor: '#f9fafb',
-                  padding: '0.5rem',
-                  borderRadius: '0.375rem',
-                  fontSize: '0.875rem',
-                  color: '#374151',
-                  border: '1px solid #e5e7eb'
-                }}>
-                  {settings.name}
-                </div>
-              </div>
-              <div>
-                <label style={{ fontSize: '0.875rem', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '0.25rem' }}>
-                  Logo
-                </label>
-                <div style={{
-                  backgroundColor: '#f9fafb',
-                  padding: '0.5rem',
-                  borderRadius: '0.375rem',
-                  fontSize: '0.875rem',
-                  color: '#374151',
-                  border: '1px solid #e5e7eb',
-                  fontFamily: 'monospace'
-                }}>
-                  {settings.logo}
-                </div>
-              </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <h1 className="text-xl font-semibold text-gray-900">
+                Site Settings
+              </h1>
             </div>
-
-            <div>
-              <label style={{ fontSize: '0.875rem', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '0.25rem' }}>
-                Description
-              </label>
-              <div style={{
-                backgroundColor: '#f9fafb',
-                padding: '0.5rem',
-                borderRadius: '0.375rem',
-                fontSize: '0.875rem',
-                color: '#374151',
-                border: '1px solid #e5e7eb'
-              }}>
-                {settings.description}
-              </div>
+            <div className="flex items-center space-x-4">
+              <a
+                href="/admin"
+                className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+              >
+                Back to Dashboard
+              </a>
+              <button
+                onClick={() => {
+                  document.cookie = 'admin-auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+                  window.location.href = '/'
+                }}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              >
+                Logout
+              </button>
             </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-              <div>
-                <label style={{ fontSize: '0.875rem', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '0.25rem' }}>
-                  Facebook
-                </label>
-                <div style={{
-                  backgroundColor: '#f9fafb',
-                  padding: '0.5rem',
-                  borderRadius: '0.375rem',
-                  fontSize: '0.875rem',
-                  color: '#374151',
-                  border: '1px solid #e5e7eb'
-                }}>
-                  {settings.social.facebook || 'Not set'}
-                </div>
-              </div>
-              <div>
-                <label style={{ fontSize: '0.875rem', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '0.25rem' }}>
-                  Instagram
-                </label>
-                <div style={{
-                  backgroundColor: '#f9fafb',
-                  padding: '0.5rem',
-                  borderRadius: '0.375rem',
-                  fontSize: '0.875rem',
-                  color: '#374151',
-                  border: '1px solid #e5e7eb'
-                }}>
-                  {settings.social.instagram || 'Not set'}
-                </div>
-              </div>
-              <div>
-                <label style={{ fontSize: '0.875rem', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '0.25rem' }}>
-                  Twitter
-                </label>
-                <div style={{
-                  backgroundColor: '#f9fafb',
-                  padding: '0.5rem',
-                  borderRadius: '0.375rem',
-                  fontSize: '0.875rem',
-                  color: '#374151',
-                  border: '1px solid #e5e7eb'
-                }}>
-                  {settings.social.twitter || 'Not set'}
-                </div>
-              </div>
-              <div>
-                <label style={{ fontSize: '0.875rem', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '0.25rem' }}>
-                  YouTube
-                </label>
-                <div style={{
-                  backgroundColor: '#f9fafb',
-                  padding: '0.5rem',
-                  borderRadius: '0.375rem',
-                  fontSize: '0.875rem',
-                  color: '#374151',
-                  border: '1px solid #e5e7eb'
-                }}>
-                  {settings.social.youtube || 'Not set'}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div
-            style={{
-              backgroundColor: '#f9fafb',
-              padding: '1rem',
-              borderRadius: '0.375rem',
-              fontFamily: 'monospace',
-              fontSize: '0.75rem',
-              color: '#374151',
-              whiteSpace: 'pre-wrap',
-              border: '1px solid #e5e7eb',
-              marginTop: '1rem'
-            }}
-          >
-            {JSON.stringify(settings, null, 2)}
           </div>
         </div>
       </div>
 
-      <div style={{ marginTop: '2rem', padding: '1.5rem', backgroundColor: '#f9fafb', borderRadius: '0.5rem', border: '1px solid #e5e7eb' }}>
-        <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827', marginBottom: '0.5rem' }}>
-          How to Edit Settings
-        </h3>
-        <ol style={{ color: '#6b7280', fontSize: '0.875rem', lineHeight: '1.5' }}>
-          <li>1. Open your code editor</li>
-          <li>2. Open <code>content/settings/site.json</code></li>
-          <li>3. Edit the JSON values directly</li>
-          <li>4. Save the file - changes will be reflected on the site</li>
-          <li>5. Use the &quot;Copy Path&quot; button above to quickly find the file</li>
-        </ol>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Site Settings</h1>
+          <p className="text-gray-600 mt-2">Edit your site configuration by modifying the JSON file in the content/settings/ directory.</p>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-sm border p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Site Configuration</h2>
+
+          <div className="space-y-4">
+            <div className="border border-gray-200 rounded-lg p-4">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-medium text-gray-900">Site Settings File</h3>
+                  <p className="text-sm text-gray-600 mt-1">Main configuration file for your website</p>
+                </div>
+                <div className="flex gap-2">
+                  <a
+                    href="/"
+                    className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors"
+                  >
+                    View Site
+                  </a>
+                  <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm font-mono">
+                    content/settings/site.json
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h3 className="font-medium text-blue-900 mb-2">How to Edit Settings</h3>
+            <ol className="text-sm text-blue-800 space-y-1">
+              <li>1. Open your code editor</li>
+              <li>2. Navigate to the <code className="bg-blue-100 px-1 rounded">content/settings/</code> directory</li>
+              <li>3. Open the <code className="bg-blue-100 px-1 rounded">site.json</code> file</li>
+              <li>4. Edit the JSON values directly</li>
+              <li>5. Save the file - changes will be reflected on the site</li>
+            </ol>
+          </div>
+
+          <div className="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+            <h3 className="font-medium text-yellow-900 mb-2">Current Configuration</h3>
+            <p className="text-sm text-yellow-800 mb-2">The settings file contains:</p>
+            <ul className="text-sm text-yellow-800 space-y-1">
+              <li>• Site name and description</li>
+              <li>• Logo and favicon paths</li>
+              <li>• Social media links</li>
+              <li>• SEO settings</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   )

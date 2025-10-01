@@ -1,10 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Recipe } from '@/types/recipe'
+import LoginForm from '@/components/LoginForm'
 import AdminDashboard from '@/components/AdminDashboard'
 import PageManagement from '@/components/PageManagement'
 import SettingsManagement from '@/components/SettingsManagement'
+import { getCurrentUser, logout } from '@/lib/auth'
 
 interface AdminPageClientProps {
   recipes: Recipe[]
@@ -12,6 +14,51 @@ interface AdminPageClientProps {
 
 export default function AdminPageClient({ recipes }: AdminPageClientProps) {
   const [currentView, setCurrentView] = useState('dashboard')
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const checkAuth = () => {
+      try {
+        const user = getCurrentUser()
+        setIsAuthenticated(!!user)
+      } catch (error) {
+        console.error('Auth check error:', error)
+        setIsAuthenticated(false)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    checkAuth()
+  }, [])
+
+  const handleLogout = () => {
+    try {
+      logout()
+      setIsAuthenticated(false)
+      window.location.href = '/'
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
+  }
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading admin dashboard...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Show login form if not authenticated
+  if (!isAuthenticated) {
+    return <LoginForm onLoginSuccess={() => setIsAuthenticated(true)} />
+  }
 
   const renderView = () => {
     switch (currentView) {
@@ -31,44 +78,17 @@ export default function AdminPageClient({ recipes }: AdminPageClientProps) {
       {/* Navigation */}
       <nav style={{ backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', padding: '1rem 0' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+          {/* Header with title and action buttons */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
             <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#111827' }}>
               Neera Food Lab Admin
             </h1>
-            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-              <button
-                onClick={() => setCurrentView('dashboard')}
-                style={{
-                  padding: '0.5rem 1rem',
-                  backgroundColor: currentView === 'dashboard' ? '#3b82f6' : 'transparent',
-                  color: currentView === 'dashboard' ? 'white' : '#374151',
-                  border: 'none',
-                  borderRadius: '0.375rem',
-                  cursor: 'pointer',
-                  fontSize: '0.875rem'
-                }}
-              >
-                Dashboard
-              </button>
-              <button
-                onClick={() => setCurrentView('recipes')}
-                style={{
-                  padding: '0.5rem 1rem',
-                  backgroundColor: currentView === 'recipes' ? '#3b82f6' : 'transparent',
-                  color: currentView === 'recipes' ? 'white' : '#374151',
-                  border: 'none',
-                  borderRadius: '0.375rem',
-                  cursor: 'pointer',
-                  fontSize: '0.875rem'
-                }}
-              >
-                Manage Recipes
-              </button>
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
               <a
-                href="/content/recipes"
+                href="/"
                 style={{
                   padding: '0.5rem 1rem',
-                  backgroundColor: '#10b981',
+                  backgroundColor: '#6b7280',
                   color: 'white',
                   border: 'none',
                   borderRadius: '0.375rem',
@@ -78,37 +98,99 @@ export default function AdminPageClient({ recipes }: AdminPageClientProps) {
                   display: 'inline-block'
                 }}
               >
-                + Add Recipe
+                View Site
               </a>
               <button
-                onClick={() => setCurrentView('pages')}
+                onClick={handleLogout}
                 style={{
                   padding: '0.5rem 1rem',
-                  backgroundColor: currentView === 'pages' ? '#3b82f6' : 'transparent',
-                  color: currentView === 'pages' ? 'white' : '#374151',
+                  backgroundColor: '#ef4444',
+                  color: 'white',
                   border: 'none',
                   borderRadius: '0.375rem',
                   cursor: 'pointer',
                   fontSize: '0.875rem'
                 }}
               >
-                Pages
-              </button>
-              <button
-                onClick={() => setCurrentView('settings')}
-                style={{
-                  padding: '0.5rem 1rem',
-                  backgroundColor: currentView === 'settings' ? '#3b82f6' : 'transparent',
-                  color: currentView === 'settings' ? 'white' : '#374151',
-                  border: 'none',
-                  borderRadius: '0.375rem',
-                  cursor: 'pointer',
-                  fontSize: '0.875rem'
-                }}
-              >
-                Settings
+                Logout
               </button>
             </div>
+          </div>
+
+          {/* Navigation Tabs */}
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <button
+              onClick={() => setCurrentView('dashboard')}
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: currentView === 'dashboard' ? '#3b82f6' : 'transparent',
+                color: currentView === 'dashboard' ? 'white' : '#374151',
+                border: 'none',
+                borderRadius: '0.375rem',
+                cursor: 'pointer',
+                fontSize: '0.875rem'
+              }}
+            >
+              Dashboard
+            </button>
+            <button
+              onClick={() => setCurrentView('recipes')}
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: currentView === 'recipes' ? '#3b82f6' : 'transparent',
+                color: currentView === 'recipes' ? 'white' : '#374151',
+                border: 'none',
+                borderRadius: '0.375rem',
+                cursor: 'pointer',
+                fontSize: '0.875rem'
+              }}
+            >
+              Manage Recipes
+            </button>
+            <a
+              href="/content/recipes"
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: '#10b981',
+                color: 'white',
+                border: 'none',
+                borderRadius: '0.375rem',
+                cursor: 'pointer',
+                fontSize: '0.875rem',
+                textDecoration: 'none',
+                display: 'inline-block'
+              }}
+            >
+              + Add Recipe
+            </a>
+            <button
+              onClick={() => setCurrentView('pages')}
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: currentView === 'pages' ? '#3b82f6' : 'transparent',
+                color: currentView === 'pages' ? 'white' : '#374151',
+                border: 'none',
+                borderRadius: '0.375rem',
+                cursor: 'pointer',
+                fontSize: '0.875rem'
+              }}
+            >
+              Pages
+            </button>
+            <button
+              onClick={() => setCurrentView('settings')}
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: currentView === 'settings' ? '#3b82f6' : 'transparent',
+                color: currentView === 'settings' ? 'white' : '#374151',
+                border: 'none',
+                borderRadius: '0.375rem',
+                cursor: 'pointer',
+                fontSize: '0.875rem'
+              }}
+            >
+              Settings
+            </button>
           </div>
         </div>
       </nav>

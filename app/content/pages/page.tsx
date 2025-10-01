@@ -1,165 +1,132 @@
-import fs from 'fs'
-import path from 'path'
-import matter from 'gray-matter'
+'use client'
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { getCurrentUser } from '@/lib/auth'
 
-interface PageFrontmatter {
-  title: string
-  description: string
-  heroTitle?: string
-  heroSubtitle?: string
-  heroImage?: string
-}
+export default function PagesPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-interface PageFile {
-  filename: string
-  frontmatter: PageFrontmatter
-  content: string
-}
-
-async function getPages(): Promise<PageFile[]> {
-  const pagesDirectory = path.join(process.cwd(), 'content/pages')
-  const filenames = fs.readdirSync(pagesDirectory)
-
-  const pages = filenames
-    .filter(filename => filename.endsWith('.md'))
-    .map(filename => {
-      const filePath = path.join(pagesDirectory, filename)
-      const fileContents = fs.readFileSync(filePath, 'utf8')
-      const { data, content } = matter(fileContents)
-
-      return {
-        filename: filename.replace('.md', ''),
-        frontmatter: data as PageFrontmatter,
-        content
+  useEffect(() => {
+    const checkAuth = () => {
+      try {
+        const user = getCurrentUser()
+        setIsAuthenticated(!!user)
+      } catch (error) {
+        console.error('Auth check error:', error)
+        setIsAuthenticated(false)
+      } finally {
+        setIsLoading(false)
       }
-    })
+    }
 
-  return pages
-}
+    checkAuth()
+  }, [])
 
-export default async function PagesPage() {
-  const pages = await getPages()
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Show login if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600 mb-6">You need to log in to access this page.</p>
+          <a
+            href="/admin"
+            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Go to Login
+          </a>
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <Link
-          href="/admin"
-          style={{
-            backgroundColor: '#6b7280',
-            color: 'white',
-            padding: '0.5rem 1rem',
-            borderRadius: '0.375rem',
-            textDecoration: 'none',
-            fontSize: '0.875rem',
-            display: 'inline-block',
-            marginBottom: '1rem'
-          }}
-        >
-          ← Back to Admin
-        </Link>
-        <h1 style={{ fontSize: '2rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>
-          Page Files
-        </h1>
-        <p style={{ color: '#6b7280' }}>
-          Edit these markdown files to update your site pages. Files are located in <code>content/pages/</code>
-        </p>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <h1 className="text-xl font-semibold text-gray-900">
+                Manage Pages
+              </h1>
+            </div>
+            <div className="flex items-center space-x-4">
+              <a
+                href="/admin"
+                className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+              >
+                Back to Dashboard
+              </a>
+              <button
+                onClick={() => {
+                  document.cookie = 'admin-auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+                  window.location.href = '/'
+                }}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div style={{ display: 'grid', gap: '1.5rem' }}>
-        {pages.map((page) => (
-          <div
-            key={page.filename}
-            style={{
-              backgroundColor: 'white',
-              padding: '1.5rem',
-              borderRadius: '0.5rem',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-              border: '1px solid #e5e7eb'
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-              <div>
-                <h2 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#111827', marginBottom: '0.25rem' }}>
-                  {page.frontmatter.title || page.filename}
-                </h2>
-                <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>
-                  {page.frontmatter.description}
-                </p>
-                {page.frontmatter.heroTitle && (
-                  <p style={{ color: '#374151', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-                    Hero: {page.frontmatter.heroTitle}
-                  </p>
-                )}
-              </div>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <Link
-                  href={`/${page.filename}`}
-                  style={{
-                    backgroundColor: '#3b82f6',
-                    color: 'white',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '0.375rem',
-                    textDecoration: 'none',
-                    fontSize: '0.875rem',
-                    fontWeight: '500'
-                  }}
-                >
-                  View Page
-                </Link>
-                <span
-                  style={{
-                    backgroundColor: '#f9fafb',
-                    color: '#374151',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '0.375rem',
-                    fontSize: '0.875rem',
-                    fontFamily: 'monospace',
-                    border: '1px solid #e5e7eb'
-                  }}
-                >
-                  content/pages/{page.filename}.md
-                </span>
-              </div>
-            </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Page Management</h1>
+          <p className="text-gray-600 mt-2">Edit your website pages by modifying the markdown files in the content/pages/ directory.</p>
+        </div>
 
-            <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '1rem' }}>
-              <h3 style={{ fontSize: '1rem', fontWeight: '600', color: '#374151', marginBottom: '0.5rem' }}>
-                File: {page.filename}.md
-              </h3>
-              <div
-                style={{
-                  backgroundColor: '#f9fafb',
-                  padding: '1rem',
-                  borderRadius: '0.375rem',
-                  fontFamily: 'monospace',
-                  fontSize: '0.75rem',
-                  color: '#374151',
-                  whiteSpace: 'pre-wrap',
-                  maxHeight: '200px',
-                  overflow: 'auto',
-                  border: '1px solid #e5e7eb'
-                }}
-              >
-                {page.content.substring(0, 500)}{page.content.length > 500 ? '...' : ''}
+        <div className="bg-white rounded-lg shadow-sm border p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Available Pages</h2>
+
+          <div className="space-y-4">
+            <div className="border border-gray-200 rounded-lg p-4">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-medium text-gray-900">Homepage</h3>
+                  <p className="text-sm text-gray-600 mt-1">Main landing page of your website</p>
+                </div>
+                <div className="flex gap-2">
+                  <a
+                    href="/"
+                    className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition-colors"
+                  >
+                    View Page
+                  </a>
+                  <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm font-mono">
+                    content/pages/homepage.md
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-        ))}
-      </div>
 
-      <div style={{ marginTop: '2rem', padding: '1.5rem', backgroundColor: '#f9fafb', borderRadius: '0.5rem', border: '1px solid #e5e7eb' }}>
-        <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#111827', marginBottom: '0.5rem' }}>
-          How to Edit Pages
-        </h3>
-        <ol style={{ color: '#6b7280', fontSize: '0.875rem', lineHeight: '1.5' }}>
-          <li>1. Open your code editor</li>
-          <li>2. Navigate to the <code>content/pages/</code> directory</li>
-          <li>3. Edit the markdown files (.md) directly</li>
-          <li>4. Save the file - changes will be reflected on the site</li>
-          <li>5. Use the &quot;Copy Path&quot; button above to quickly find the file</li>
-        </ol>
+          <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h3 className="font-medium text-blue-900 mb-2">How to Edit Pages</h3>
+            <ol className="text-sm text-blue-800 space-y-1">
+              <li>1. Open your code editor</li>
+              <li>2. Navigate to the <code className="bg-blue-100 px-1 rounded">content/pages/</code> directory</li>
+              <li>3. Edit the markdown files (.md) directly</li>
+              <li>4. Save the file - changes will be reflected on the site</li>
+            </ol>
+          </div>
+        </div>
       </div>
     </div>
   )
